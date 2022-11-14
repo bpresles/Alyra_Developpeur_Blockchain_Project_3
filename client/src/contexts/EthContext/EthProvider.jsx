@@ -17,7 +17,7 @@ const EthProvider = ({ children }) => {
         const { abi } = artifact;
         let address, contract;
         try {
-          address = artifact.networks[networkID]?.address;
+          address = artifact.address;
           
           if (address) {
             contract = new web3.eth.Contract(abi, address);
@@ -36,7 +36,7 @@ const EthProvider = ({ children }) => {
   useEffect(() => {
     const tryInit = async () => {
       try {
-        const artifact = require("../../contracts/Voting.json");
+        const artifact = require("../../contracts/localhost/Voting.json");
         init(artifact);
       } catch (err) {
         console.error(err);
