@@ -38,6 +38,7 @@ contract Voting is Ownable {
     event ProposalRegistered(uint proposalId);
     event Voted (address voter, uint proposalId);
     event VotingSessionReinitialized (bool reset);
+    event UnknownCallReceived(bytes _input);
     
     modifier onlyVoters() {
         require(voters[msg.sender].isRegistered, "You're not a voter");

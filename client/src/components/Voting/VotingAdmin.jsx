@@ -4,17 +4,17 @@ import ChangeWorkflowStatus from "./ChangeWorkflow"
 import ResetVotingSession from "./ResetVotingSession"
 
 function VotingAdmin() {
-    const { state: { contract, accounts, owner } } = useEthContext();
+    const { state: { accounts, owner } } = useEthContext();
 
     return (
         <div className="voting-admin">
         {
             accounts[0] === owner ? 
-            <>
-            <ResetVotingSession />
-            <AddVoterForm />
-            <ChangeWorkflowStatus />
-            </> : <></>
+            <div>
+                <ResetVotingSession /><br/>
+                <AddVoterForm /><br/>
+                <ChangeWorkflowStatus /><br/>
+            </div> : <div></div>
         }
         </div>
     );

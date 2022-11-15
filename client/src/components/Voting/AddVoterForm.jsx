@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useEthContext from "../../hooks/useEthContext";
 import { getRPCErrorMessage } from "../Common/error";
 

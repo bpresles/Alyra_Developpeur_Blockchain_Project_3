@@ -9,13 +9,22 @@ const Navbar = () => {
     const { state: { accounts, contract, networkID, owner } } = useEthContext();
     const [workflowStatus, setWorkflowStatus] = useState(WorkflowStatus.RegisteringVoters)
 
-
     useEffect(() => {
         (async () => {
             const currentStatus = await contract.methods.workflowStatus().call({from: accounts[0]})
             if (currentStatus) {
                 setWorkflowStatus(parseInt(currentStatus))
             }
+
+            await contract.events.WorkflowStatusChange({fromBlock: 'earliest'})
+                .on('data', event => {
+                    let newWorkflowStatus = parseInt(event.returnValues.newStatus);
+                    setWorkflowStatus(newWorkflowStatus);
+                    console.log(newWorkflowStatus);
+                })
+                .on('changed', changed => console.log(changed))
+                .on('error', error => console.log(error))
+                .on('connected', str => console.log(str));
         })()
     })
 
@@ -50,7 +59,7 @@ const Navbar = () => {
             </Nav>
             <p>&nbsp;</p>
             <div>
-            Connected User: {accounts[0]} on network: {networkID}
+                <p>Connected User: {accounts[0]} on network: {networkID}</p>
             </div>
         </div>
     );

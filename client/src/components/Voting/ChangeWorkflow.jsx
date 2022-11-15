@@ -25,39 +25,44 @@ const ChangeWorkflowStatus = () => {
             }
 
             await contract.events.WorkflowStatusChange({fromBlock: 'earliest'})
-            .on('data', event => {
-              let newWorkflowStatus = parseInt(event.returnValues.newStatus);
-              setWorkflowStatus(newWorkflowStatus);
-              console.log(newWorkflowStatus);
-            })
-            .on('changed', changed => console.log(changed))
-            .on('error', error => console.log(error))
-            .on('connected', str => console.log(str));
+                .on('data', event => {
+                    let newWorkflowStatus = parseInt(event.returnValues.newStatus);
+                    setWorkflowStatus(newWorkflowStatus);
+                    console.log(newWorkflowStatus);
+                })
+                .on('changed', changed => console.log(changed))
+                .on('error', error => console.log(error))
+                .on('connected', str => console.log(str))
         })()
     }, [contract, accounts, setWorkflowStatus])
 
     const handleChangeWorkflowStatus = async () => {
         const newStatus = workflowStatus+1;
 
+        let changeWorkflowStatusCall
         switch (newStatus) {
             case WorkflowStatus.ProposalsRegistrationStarted:
-                contract.methods.startProposalsRegistering().send({from: accounts[0]});
+                changeWorkflowStatusCall = await contract.methods.startProposalsRegistering().send({from: accounts[0]});
                 break;
             case WorkflowStatus.ProposalsRegistrationEnded:
-                await contract.methods.endProposalsRegistering().send({from: accounts[0]});
+                changeWorkflowStatusCall = await contract.methods.endProposalsRegistering().send({from: accounts[0]});
                 break;
             case WorkflowStatus.VotingSessionStarted:
-                await contract.methods.startVotingSession().send({from: accounts[0]});
+                changeWorkflowStatusCall = await contract.methods.startVotingSession().send({from: accounts[0]});
                 break;
             case WorkflowStatus.VotingSessionEnded:
-                await contract.methods.endVotingSession().send({from: accounts[0]});
+                changeWorkflowStatusCall = await contract.methods.endVotingSession().send({from: accounts[0]});
                 break;
             case WorkflowStatus.VotesTallied:
-                await contract.methods.tallyVotes().send({from: accounts[0]});
+                changeWorkflowStatusCall = await contract.methods.tallyVotes().send({from: accounts[0]});
                 break;
             default:
-                console.log('Wrong status specified.');
+                console.log('Wrong status specified.')
                 break;
+        }
+
+        if (changeWorkflowStatusCall) {
+            setWorkflowStatus(changeWorkflowStatusCall.events.WorkflowStatusChange.returnValues.newStatus)
         }
     }
 
