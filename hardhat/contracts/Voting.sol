@@ -26,6 +26,7 @@ contract Voting is Ownable {
     }
 
     uint public winningProposalID;
+    uint public votingSessionStartBlock;
     WorkflowStatus public workflowStatus;
     Proposal[] proposalsArray;
     mapping (address => Voter) voters;
@@ -53,10 +54,6 @@ contract Voting is Ownable {
     
     function getOneProposal(uint _id) external onlyVoters view returns (Proposal memory) {
         return proposalsArray[_id];
-    }
-    
-    function getAllProposals() external onlyVoters view returns (Proposal[] memory) {
-        return proposalsArray;
     }
  
     // ::::::::::::: REGISTRATION ::::::::::::: // 
@@ -156,5 +153,8 @@ contract Voting is Ownable {
 
         emit VotingSessionReinitialized(true);
         emit WorkflowStatusChange(WorkflowStatus.VotesTallied, WorkflowStatus.RegisteringVoters);
+
+        // Save new session start block number.
+        votingSessionStartBlock = block.number;
     }
 }

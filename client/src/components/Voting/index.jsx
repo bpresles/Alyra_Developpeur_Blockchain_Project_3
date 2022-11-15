@@ -12,7 +12,7 @@ import Proposal from "../../pages/proposal";
 import Winner from "../../pages/winner";
   
 const Voting = () => {
-    const { state } = useEthContext();
+    const { state } = useEthContext()
 
     return (
         <div>
@@ -34,4 +34,4 @@ const Voting = () => {
     );
 };
   
-export default Voting;
+export default Voting

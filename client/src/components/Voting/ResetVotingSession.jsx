@@ -9,7 +9,7 @@ const ResetVotingSession = () => {
 
     const [resetStatus, setResetStatus] = useState(false);
 
-    useEffect(() => {
+   /* useEffect(() => {
 
         (async () => {
             await contract.events.VotingSessionReinitialized({fromBlock: 'earliest'})
@@ -23,7 +23,7 @@ const ResetVotingSession = () => {
             .on('connected', str => console.log(str));
         })();
 
-    }, [contract, setResetStatus]);
+    }, [contract, setResetStatus]);*/
 
     const resetVote = async () => {
         await contract.methods.resetVotingProcess().send({from: accounts[0]});

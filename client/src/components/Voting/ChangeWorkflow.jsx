@@ -1,17 +1,9 @@
 import { useEffect } from "react";
 import { useState } from "react";
+import { WorkflowStatus } from "../../contexts/EthContext/state";
 import useEthContext from "../../hooks/useEthContext";
 
 const ChangeWorkflowStatus = () => {
-
-    const WorkflowStatus = {
-        RegisteringVoters: 0,
-        ProposalsRegistrationStarted: 1,
-        ProposalsRegistrationEnded: 2,
-        VotingSessionStarted: 3,
-        VotingSessionEnded: 4,
-        VotesTallied: 5,
-    }
 
     const WorkflowStatusLabels = {
         0: 'Registering voters',
@@ -34,9 +26,9 @@ const ChangeWorkflowStatus = () => {
 
             await contract.events.WorkflowStatusChange({fromBlock: 'earliest'})
             .on('data', event => {
-              let eventVal = parseInt(event.returnValues.newStatus);
-              setWorkflowStatus(eventVal);
-              console.log(eventVal);
+              let newWorkflowStatus = parseInt(event.returnValues.newStatus);
+              setWorkflowStatus(newWorkflowStatus);
+              console.log(newWorkflowStatus);
             })
             .on('changed', changed => console.log(changed))
             .on('error', error => console.log(error))
@@ -47,11 +39,9 @@ const ChangeWorkflowStatus = () => {
     const handleChangeWorkflowStatus = async () => {
         const newStatus = workflowStatus+1;
 
-        console.log(newStatus);
-
         switch (newStatus) {
             case WorkflowStatus.ProposalsRegistrationStarted:
-                await contract.methods.startProposalsRegistering().send({from: accounts[0]});
+                contract.methods.startProposalsRegistering().send({from: accounts[0]});
                 break;
             case WorkflowStatus.ProposalsRegistrationEnded:
                 await contract.methods.endProposalsRegistering().send({from: accounts[0]});
