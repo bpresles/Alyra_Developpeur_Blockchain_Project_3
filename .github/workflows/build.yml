@@ -32,6 +32,11 @@ jobs:
         run: |
           cd hardhat
           yarn build
+      - name: Deploy smart contract
+        run: |
+          cd hardhat
+          yarn dev &
+          yarn deploy:hardhat
       - name: Build front
         run: |
           cd client
