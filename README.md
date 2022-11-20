@@ -1,14 +1,24 @@
-# Voting [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Build](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_3/actions/workflows/build.yml/badge.svg)](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_3/actions/workflows/build.yml) [![Deploy](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_3/actions/workflows/deploy.yml/badge.svg)](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_2/actions/workflows/deploy.yml) [![Test](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_3/actions/workflows/tests.yml/badge.svg)](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_3/actions/workflows/tests.yml)
+# Voting [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Build](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_3/actions/workflows/build.yml/badge.svg)](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_3/actions/workflows/build.yml) [![Test](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_3/actions/workflows/tests.yml/badge.svg)](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_3/actions/workflows/tests.yml)
 
 ## Table of Contents
-- [Presentation](#presentation)
-- [Structure](#structure)
-- [Installation](#installation)
-- [Commands](#commands)
-- [Tests structure](#tests-structure)
-- [Tests results](#tests-results)
-- [Gas consumption](#gas-consumption)
-- [Coverage](#coverage)
+- [Voting   ](#voting---)
+  - [Table of Contents](#table-of-contents)
+  - [Presentation](#presentation)
+  - [Structure](#structure)
+  - [Installation](#installation)
+  - [Commands](#commands)
+    - [Compile smart contrat](#compile-smart-contrat)
+    - [Run tests without coverage](#run-tests-without-coverage)
+    - [Run tests with coverage](#run-tests-with-coverage)
+    - [Deploy smart contrat](#deploy-smart-contrat)
+    - [Start a local JSON-RPC node](#start-a-local-json-rpc-node)
+  - [Front commands](#front-commands)
+    - [Build](#build)
+    - [Start the front app](#start-the-front-app)
+  - [Smart contract Tests](#smart-contract-tests)
+    - [Tests results](#tests-results)
+    - [Gas consumption](#gas-consumption)
+    - [Coverage](#coverage)
 
 <a name="presentation"></a>
 ## Presentation

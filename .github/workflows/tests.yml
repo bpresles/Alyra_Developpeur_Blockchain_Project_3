@@ -11,17 +11,23 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Install packages
+      - name: Install node
         uses: actions/setup-node@v3
         with:
           node-version: '16.x'
-      - run: npm install -g yarn
+      - name: Install yarn
+        run: npm install -g yarn
         shell: bash
-      - run: |
+      - name: Install packages
+        run: |
           cd hardhat
           yarn install
         shell: bash
       - name: Run Tests
-        run: yarn test
+        run: |
+          cd hardhat
+          yarn test
       - name: Run Coverage
-        run: yarn coverage
+        run: |
+          cd hardhat
+          yarn coverage
