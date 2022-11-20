@@ -21,7 +21,6 @@ const reducer = (state, action) => {
   }
 };
 
-
 const WorkflowStatus = {
   RegisteringVoters: 0,
   ProposalsRegistrationStarted: 1,

@@ -1,4 +1,4 @@
-# Voting [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Build](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_2/actions/workflows/build.yml/badge.svg)](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_2/actions/workflows/build.yml) [![Deploy](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_2/actions/workflows/deploy.yml/badge.svg)](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_2/actions/workflows/deploy.yml) [![Test](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_2/actions/workflows/tests.yml/badge.svg)](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_2/actions/workflows/tests.yml)
+# Voting [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Build](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_3/actions/workflows/build.yml/badge.svg)](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_3/actions/workflows/build.yml) [![Deploy](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_3/actions/workflows/deploy.yml/badge.svg)](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_2/actions/workflows/deploy.yml) [![Test](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_3/actions/workflows/tests.yml/badge.svg)](https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_3/actions/workflows/tests.yml)
 
 ## Table of Contents
 - [Presentation](#presentation)
@@ -25,15 +25,15 @@ client (Front)
 |
 +-- src (React sources)
 
-truffle (Smart Contract)
+hardhat (Smart Contract)
 |
 +-- contracts (Solidity source file of the smart contract)
 |
-+-- scripts (Deployment script)
++-- deploy (Deployment script)
 |
 +-- test (Unit tests)
 |
-+-- coverage (Coverage of tests reports)
++-- coverage (Coverage of tests reports - created dynamically when running coverage)
 ```
 
 <a name="installation"></a>
@@ -41,8 +41,8 @@ truffle (Smart Contract)
 To run the tests, you'll need to execute the following commands to install the required dependencies:
 
 ```bash
-$ git clone https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_2.git
-$ npm install (or yarn install)
+$ git clone https://github.com/bpresles/Alyra_Developpeur_Blockchain_Project_3.git
+$ yarn install
 ```
 
 Then copy the .env.dist file as .env:
@@ -62,27 +62,15 @@ ALCHEMY_ID="AN_ALCHEMY_ID"
 
 ### Compile smart contrat
 ```bash
-npm run build
-```
-or
-```bash
 yarn build
 ```
 
 ### Run tests without coverage
 ```bash
-npm run test
-```
-or
-```bash
 yarn test
 ```
 
 ### Run tests with coverage
-```bash
-npm run coverage
-```
-or
 ```bash
 yarn coverage
 ```
@@ -90,43 +78,23 @@ yarn coverage
 
 **Local**
 ```bash
-npx run deploy:dev
-```
-or
-```bash
 yarn deploy:dev
 ```
 **Goerli**
-```bash
-npx run deploy:goerli
-```
-or
 ```bash
 yarn deploy:goerli
 ```
 
 **Sepolia**
 ```bash
-npx run deploy:sepolia
-```
-or
-```bash
 yarn deploy:sepolia
 ```
 **Mumbai**
-```bash
-npx run deploy:mumbai
-```
-or
 ```bash
 yarn deploy:mumbai
 ```
 ### Start a local JSON-RPC node
 You can start a local JSON-RPC node to be able to interact with HardHat network using a JSON-RPC client like a wallet.
-```bash
-npm run dev
-```
-or
 ```bash
 yarn dev
 ```

@@ -1,5 +1,5 @@
 {
-  "name": "truffle-client",
+  "name": "Voting",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

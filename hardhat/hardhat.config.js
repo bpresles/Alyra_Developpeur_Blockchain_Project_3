@@ -12,12 +12,12 @@ module.exports = {
   paths: {
     deployments: '../client/src/contracts',
   },
-  defaultNetwork: 'localhost',
+  defaultNetwork: 'ganache',
   networks: {
     hardhat: {
+      chainId: 1337,
       accounts: {
         count: 10,
-        mnemonic: `${process.env.MNEMONIC}`,
       },
     },
     ganache: {
@@ -25,7 +25,7 @@ module.exports = {
         count: 10,
         mnemonic: `${process.env.MNEMONIC}`,
       },
-      chainId: 5777,
+      chainId: 1337,
       url: `http://localhost:8545`,
     },
     goerli: {

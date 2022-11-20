@@ -68,6 +68,7 @@ const CastVoteForm = () => {
                             if (index > 0) {
                                 return (<option key={index} value={index}>{proposal.description}</option>)
                             }
+                            return (<></>)
                         })}
                     </select>
                     <button onClick={submitVote}>Submit my vote</button>

@@ -12,7 +12,7 @@ const EthProvider = ({ children }) => {
         const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
         const accounts = await web3.eth.requestAccounts();
         const networkID = await web3.eth.net.getId();
-        let owner = accounts[0];
+        let owner;
 
         const { abi } = artifact;
         let address, contract;
@@ -21,7 +21,7 @@ const EthProvider = ({ children }) => {
           
           if (address) {
             contract = new web3.eth.Contract(abi, address);
-            owner = await contract.methods.owner().call({from: accounts[0]});
+            owner = await contract.methods.owner().call();
           }
         } catch (err) {
           console.error(err);
@@ -36,7 +36,7 @@ const EthProvider = ({ children }) => {
   useEffect(() => {
     const tryInit = async () => {
       try {
-        const artifact = require("../../contracts/localhost/Voting.json");
+        const artifact = require("../../contracts/ganache/Voting.json");
         init(artifact);
       } catch (err) {
         console.error(err);

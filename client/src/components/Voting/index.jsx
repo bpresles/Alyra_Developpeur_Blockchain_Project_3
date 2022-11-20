@@ -18,17 +18,17 @@ const Voting = () => {
         <div>
             {
                 !state.artifact ? <NoticeNoArtifact /> :
-                !state.contract ? <NoticeWrongNetwork /> :
-                <>
-                    <Navbar />
-                    <Routes>
-                        <Route exact path='/' element={<Home />} />
-                        <Route path='/admin' element={<Admin />} />
-                        <Route path='/proposal' element={<Proposal />} />
-                        <Route path='/vote' element={<Vote />} />
-                        <Route path='/winner' element={<Winner />} />
-                    </Routes>
-                </>
+                    !state.contract ? <NoticeWrongNetwork /> :
+                        <>
+                            <Navbar />
+                            <Routes>
+                                <Route exact path='/' element={<Home />} />
+                                <Route path='/admin' element={<Admin />} />
+                                <Route path='/proposal' element={<Proposal />} />
+                                <Route path='/vote' element={<Vote />} />
+                                <Route path='/winner' element={<Winner />} />
+                            </Routes>
+                        </>
             }
         </div>
     );

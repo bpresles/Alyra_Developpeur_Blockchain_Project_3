@@ -4,8 +4,7 @@
   "license": "MIT",
   "scripts": {
     "build": "npx hardhat compile",
-    "dev": "npx hardhat node --network hardhat",
-    "deploy:dev": "npx hardhat --network localhost deploy",
+    "deploy:dev": "npx hardhat --network ganache deploy",
     "deploy:goerli": "npx hardhat --network goerli deploy",
     "deploy:sepolia": "npx hardhat --network sepolia deploy",
     "deploy:mumbai": "npx hardhat --network mumbai deploy",
