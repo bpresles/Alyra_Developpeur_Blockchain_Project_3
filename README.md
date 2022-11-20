@@ -4,6 +4,7 @@
 - [Voting   ](#voting---)
   - [Table of Contents](#table-of-contents)
   - [Presentation](#presentation)
+  - [Live demo](#live-demo)
   - [Structure](#structure)
   - [Installation](#installation)
   - [Commands](#commands)
@@ -23,6 +24,13 @@
 <a name="presentation"></a>
 ## Presentation
 A simple voting system for small organizations that allows to register voters, let them make proposals, vote for one proposal and then obtain the winning proposal in a simple majority manner.
+
+<a name="demo"></a>
+## Live demo
+You can access a live demo on these URLs:
+
+- With an IPFS enabled browser like Brave: ipns://alyra_project3.presles.fr/
+- With any browser: https://alyra-developpeur-blockchain-project-3-bpresles.vercel.app/
 
 <a name="structure"></a>
 ## Structure
