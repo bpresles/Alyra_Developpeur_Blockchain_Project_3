@@ -35,6 +35,10 @@ jobs:
       - name: Deploy smart contract
         run: |
           cd hardhat
+          yarn dev & && yarn deploy:hardhat
+      - name: Deploy smart contract
+        run: |
+          cd hardhat
           yarn dev &
           yarn deploy:hardhat
       - name: Build front
