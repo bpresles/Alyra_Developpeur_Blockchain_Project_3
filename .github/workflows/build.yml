@@ -1,0 +1,35 @@
+name: Build
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install packages
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+      - run: npm install -g yarn
+        shell: bash
+      - run: |
+          cd hardhat
+          yarn install
+        shell: bash
+      - run: |
+          cd client
+          yarn install
+        shell: bash
+      - name: Build smart contract
+        run: |
+          cd hardhat
+          yarn build
+      - name: Build front
+        run: |
+          cd client
+          yarn build

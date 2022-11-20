@@ -331,5 +331,42 @@ context("Voting", () => {
     });
   });
 
+  context("Reset voting session", () => {
+    it("Should not allow resetting voting session for non owner", async () => {
+      await expect(votingInstance.connect(voter1).resetVotingProcess()).to.be.revertedWith('Ownable: caller is not the owner');
+    });
+
+    it('Should reset voting session', async () => {
+      await votingInstance.connect(owner).addVoter(owner.address);  
+      await votingInstance.connect(owner).addVoter(voter1.address);  
+      await votingInstance.connect(owner).addVoter(voter2.address);
+
+      await votingInstance.connect(owner).startProposalsRegistering();
+
+      await votingInstance.connect(owner).addProposal('Proposal 1');  
+      await votingInstance.connect(voter2).addProposal('Proposal 3');  
+      await votingInstance.connect(voter2).addProposal('Proposal 4');  
+
+      await votingInstance.connect(owner).endProposalsRegistering();
+
+      await votingInstance.connect(owner).startVotingSession();
+
+      await votingInstance.connect(owner).setVote(BigNumber.from(1));  
+      await votingInstance.connect(voter1).setVote(BigNumber.from(3));  
+      await votingInstance.connect(voter2).setVote(BigNumber.from(3));  
+
+      await votingInstance.connect(owner).endVotingSession();
+
+      await votingInstance.connect(owner).tallyVotes();
+
+      const receipt = await votingInstance.connect(owner).resetVotingProcess();
+
+      expect(await votingInstance.winningProposalID.call()).to.equal(BigNumber.from(0));
+
+      expect(receipt).to.emit(votingInstance, 'WorkflowStatusChange').withArgs({previousStatus: BigNumber.from(5), newStatus: BigNumber.from(0)});
+      expect(receipt).to.emit(votingInstance, 'VotingSessionReinitialized');
+    })
+  });
+
 });
 

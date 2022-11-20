@@ -1,19 +1,23 @@
+import { Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { useEffect, useState } from "react";
+import { actions } from "../../contexts/EthContext/state";
 import useEthContext from "../../hooks/useEthContext";
 import { getRPCErrorMessage } from "../Common/error";
+import SnackbarAlert from "../Common/SnackbarAlert";
 
 const CastVoteForm = () => {
-    const { state: { contract, accounts } } = useEthContext()
+    const { state: { contract, accounts }, dispatch } = useEthContext()
 
     const [proposalSelected, setProposalSelected] = useState(1)
     const [proposals, setProposals] = useState([{description: 'GENESIS'}]);
-    const [voteSubmitted, setVoteSubmitted] = useState(0);
-    const [error, setError] = useState('');
+
+    const [open, setOpen] = useState(false)
+    const [message, setMessage] = useState('')
+    const [severity, setSeverity] = useState('success')
 
     useEffect(() => {
         (async () => {
             try {
-                setError('')
                 setProposals([{description: 'GENESIS'}])
 
                 // Find all proposals submitted in the contract since last reset.
@@ -22,8 +26,6 @@ const CastVoteForm = () => {
                             fromBlock: initialVoteSessionBlock,
                             toBlock: 'latest'
                 });
-
-                console.log(oldEvents)
 
                 if (oldEvents && oldEvents.length > 0) {
                     oldEvents.map(async event => {
@@ -34,7 +36,9 @@ const CastVoteForm = () => {
             }
             catch (e) {
                 const reason = getRPCErrorMessage(e);
-                setError(reason);
+                setMessage(reason)
+                setSeverity('error')
+                setOpen(true)
             }
         })()
     }, [contract, accounts, setProposals])
@@ -48,35 +52,76 @@ const CastVoteForm = () => {
         try {
             await contract.methods.setVote(proposalSelected).call({from: accounts[0]})
             const voteResult = await contract.methods.setVote(proposalSelected).send({from: accounts[0]})
+                .on("transactionHash", async (transactionHash) => {
+                    setMessage('Vote in progress')
+                    setSeverity('success')
+                    setOpen(true)
+            
+                    dispatch({
+                        type: actions.tx,
+                        data: { transactionHash }
+                    })
+                })
 
             const proposalIdVoted = voteResult.events.Voted.returnValues.proposalId
-            setVoteSubmitted(proposalIdVoted)
+            
+            if (proposalIdVoted > 0) {
+                setMessage('Vote submitted')
+                setSeverity('success')
+            } else {
+                setMessage('Error while submitting your vote')
+                setSeverity('error')
+            }
+
+            dispatch({
+                type: actions.tx,
+                data: { transactionHash: '' }
+            })
         } 
         catch(err) {
             console.log(err);
-            setError(getRPCErrorMessage(err))
+            setMessage(getRPCErrorMessage(err))
+            setSeverity('error')
+
+            dispatch({
+                type: actions.tx,
+                data: { transactionHash: '' }
+            })
         }
+
+        setOpen(true)
     }
 
     return (
         <>
-            { proposals.length > 0 ? 
-                <>
-                    <select name="proposalSelect" value={proposalSelected} onChange={handleProposalSelect}>
+        { proposals.length > 0 ? 
+            <Box
+                component="form"
+                sx={{
+                    '& > :not(style)': { m: 1, width: '40ch' },
+                }}
+                noValidate
+                autoComplete="off"
+            >
+                
+                <FormControl>
+                    <FormLabel>Choose a proposal</FormLabel>
+                    <RadioGroup defaultValue={proposalSelected} onChange={handleProposalSelect}>
                         {(proposals).map((proposal, index) => {
                             // Index 0 is genesis proposal
                             if (index > 0) {
-                                return (<option key={index} value={index}>{proposal.description}</option>)
+                                return (<FormControlLabel value={index} control={<Radio />} label={proposal.description} />)
                             }
                             return (<></>)
                         })}
-                    </select>
-                    <button onClick={submitVote}>Submit my vote</button>
-                    &nbsp;<span>{voteSubmitted ? `Your vote for proposal id ${voteSubmitted} has been submitted successfully` : error ? error : '' }</span>
-                </>
-                : <></>
-            }
-        </>
+                    </RadioGroup>
+                    <Button onClick={submitVote} variant="contained">Vote</Button>
+                    <SnackbarAlert open={open} setOpen={setOpen} message={message} severity={severity} />
+                </FormControl>
+            </Box>
+            : <></>
+        }
+    </>
     );
 }
 

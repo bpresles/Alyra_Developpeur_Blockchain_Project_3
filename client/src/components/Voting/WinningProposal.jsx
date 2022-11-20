@@ -1,11 +1,12 @@
+import { Box, Chip } from "@mui/material";
 import { useEffect, useState } from "react"
 import useEthContext from "../../hooks/useEthContext";
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 
 const WinningProposal = () => {
 
     const { state: { contract, accounts } } = useEthContext();
     const [winningProposal, setWinningProposal] = useState();
-    const [winningProposalId, setWinningProposalId] = useState(0);
 
     useEffect(() => {
         (async () => {
@@ -14,19 +15,16 @@ const WinningProposal = () => {
             if (winningProposalId > 0) {
                 const winningProposal = await contract.methods.getOneProposal(winningProposalId).call({from: accounts[0]})
                 setWinningProposal(winningProposal)
-                setWinningProposalId(winningProposalId)
-
-                console.log(winningProposalId);
             }
         })()
-    }, [accounts, contract, setWinningProposal, setWinningProposalId])
+    }, [accounts, contract, setWinningProposal])
 
     return (
-        <div>
-            {winningProposal ?
-            `The winning proposal is ${winningProposalId}: ${winningProposal.description}`
-            : 'No winning proposal for now' }
-        </div>
+        <Box sx={{ width: '100%', textAlign: 'center' }}>
+            <Chip style={{fontSize: '14px'}} icon={<EmojiEventsIcon />} label={winningProposal ?
+            (<>The winning proposal is <span style={{fontWeight: 'bold'}}>{winningProposal.description}</span></>)
+            : 'No winning proposal for now' } />
+        </Box>
     )
 }
 

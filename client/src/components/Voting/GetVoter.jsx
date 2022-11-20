@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Box, Button, TextField } from "@mui/material";
 import useEthContext from "../../hooks/useEthContext";
 
 const GetVoter = () => {
@@ -18,12 +19,14 @@ const GetVoter = () => {
     }
 
     return (
-        <>
-            <input type="text" value={voterAddress} onChange={handleVoterAddress} />
-            <button onClick={handleGetVoter}>Get voter</button>
-            { voter ? <div>Has voted ? {voter.hasVoted ? 'yes' : 'no'}</div> : <></>}
+        <Box sx={{
+            '& > :not(style)': { m: 1, width: '40ch' },
+        }}>
+            <TextField variant="standard" label="voter address" type="text" value={voterAddress} onChange={handleVoterAddress} />
+            <Button variant="contained" onClick={handleGetVoter}>Get voter</Button>
+            { voter ? <div><p>&nbsp;</p><div>Address: {voterAddress}</div><div>Has voted ? {voter.hasVoted ? 'yes' : 'no'}</div></div> : <></>}
             { voter && voter.hasVoted ? <div>Voted proposal id: {voter.votedProposalId}</div> : <></>}
-        </>
+        </Box>
     );
 }
 

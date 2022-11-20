@@ -1,5 +1,6 @@
 const actions = {
   init: "INIT",
+  tx: "TRANSACTION",
 };
 
 const initialState = {
@@ -9,12 +10,14 @@ const initialState = {
   networkID: null,
   contract: null,
   owner: null,
+  transactionHash: null,
 };
 
 const reducer = (state, action) => {
   const { type, data } = action;
   switch (type) {
     case actions.init:
+    case actions.tx:
       return { ...state, ...data };
     default:
       throw new Error("Undefined reducer action type");
@@ -30,9 +33,19 @@ const WorkflowStatus = {
   VotesTallied: 5,
 }
 
+const WorkflowStatusLabels = {
+  0: 'Registering voters',
+  1: 'Registering proposals',
+  2: 'Proposals registration ended',
+  3: 'Voting session in progress',
+  4: 'Voting session ended',
+  5: 'Vote tallied',
+}
+
 export {
   actions,
   initialState,
   reducer,
-  WorkflowStatus
+  WorkflowStatus,
+  WorkflowStatusLabels
 };
