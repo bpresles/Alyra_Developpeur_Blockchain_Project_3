@@ -37,11 +37,6 @@ jobs:
           cd hardhat
           npm run dev
           npm deploy:hardhat
-      - name: Deploy smart contract
-        run: |
-          cd hardhat
-          yarn dev &
-          yarn deploy:hardhat
       - name: Build front
         run: |
           cd client
