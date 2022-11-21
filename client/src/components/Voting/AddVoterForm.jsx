@@ -17,6 +17,10 @@ const AddVoterForm = () => {
   const handleVoterAddress = e => {
     if (/^[A-Fa-f0-9x]+$|^$/.test(e.target.value)) {
       setVoterAddress(e.target.value);
+    } else {
+      setMessage('Invalid address')
+      setSeverity('error')
+      setOpen(true)
     }
   };
 

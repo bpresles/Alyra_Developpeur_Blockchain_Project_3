@@ -10,7 +10,6 @@ const ConnectedInfo = () => {
 
     return (
         <div>
-            <p>&nbsp;</p>
             <div style={{float: 'left'}}>
                 <Chip icon={<AlternateEmailIcon />} variant="outlined" label={accounts[0]} />&nbsp;
                 <Chip icon={<HubIcon />} variant="outlined" label={networkID} />
@@ -18,6 +17,7 @@ const ConnectedInfo = () => {
             <div style={{float: 'right'}}>
                 <TransactionDisplay />
             </div>
+            <p>&nbsp;</p>
             <p>&nbsp;</p>
         </div>
     );

@@ -1,12 +1,13 @@
 
+import { Box } from '@mui/material';
 import React from 'react';
 import MakeProposalForm from '../components/Voting/MakeProposalForm';
   
 const Proposal = () => {
   return (
-    <div>
+    <Box>
       <MakeProposalForm />
-    </div>
+    </Box>
   );
 };
   

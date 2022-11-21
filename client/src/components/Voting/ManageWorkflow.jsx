@@ -6,32 +6,17 @@ import useEthContext from '../../hooks/useEthContext';
 import { getRPCErrorMessage } from '../Common/error';
 import SnackbarAlert from '../Common/SnackbarAlert';
 
-const VotingState = () => {
-    const { state: { contract, accounts }, dispatch } = useEthContext()
-    const [workflowStatus, setWorkflowStatus] = useState(WorkflowStatus.RegisteringVoters)
+const ManageWorkflow = () => {
+    const { state: { contract, accounts, owner, currentWorkflowStatus }, dispatch } = useEthContext()
+    const [workflowStatus, setWorkflowStatus] = useState(currentWorkflowStatus)
     
     const [open, setOpen] = useState(false)
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('success')
 
     useEffect(() => {
-        (async () => {
-            const currentStatus = await contract.methods.workflowStatus().call({from: accounts[0]})
-            if (currentStatus) {
-                setWorkflowStatus(parseInt(currentStatus))
-            }
-
-            await contract.events.WorkflowStatusChange({fromBlock: 'earliest'})
-                .on('data', event => {
-                    let newWorkflowStatus = parseInt(event.returnValues.newStatus);
-                    setWorkflowStatus(newWorkflowStatus);
-                    console.log(newWorkflowStatus);
-                })
-                .on('changed', changed => console.log(changed))
-                .on('error', error => console.log(error))
-                .on('connected', str => console.log(str))
-        })()
-    }, [contract, accounts, setWorkflowStatus])
+        setWorkflowStatus(currentWorkflowStatus)
+    }, [setWorkflowStatus, currentWorkflowStatus])
 
     const resetVote = async () => {
         try {
@@ -52,6 +37,11 @@ const VotingState = () => {
             if (resetStatus) {
                 setMessage('Vote session resetted');
                 setSeverity('success');
+
+                dispatch({
+                    type: actions.changeWorkflowStatus,
+                    data: { currentWorkflowStatus: WorkflowStatus.RegisteringVoters }
+                })
             } else {
                 setMessage('Error while resetting vote session');
                 setSeverity('error');
@@ -113,7 +103,12 @@ const VotingState = () => {
             }
 
             if (changeWorkflowStatusCall) {
-                setWorkflowStatus(changeWorkflowStatusCall.events.WorkflowStatusChange.returnValues.newStatus)
+                const newWorkflowStatus = changeWorkflowStatusCall.events.WorkflowStatusChange.returnValues.newStatus;
+                setWorkflowStatus(newWorkflowStatus)
+                dispatch({
+                    type: actions.changeWorkflowStatus,
+                    data: { currentWorkflowStatus: newWorkflowStatus }
+                })
                 
                 setMessage('Workflow status changed')
                 setSeverity('success')
@@ -141,20 +136,24 @@ const VotingState = () => {
 
     return (
         <Box sx={{ width: '100%' }}>
-            <Stepper activeStep={workflowStatus} alternativeLabel>
-                {Object.keys(WorkflowStatusLabels).map((id) => (
-                    <Step key={id}>
-                        <StepLabel>{WorkflowStatusLabels[id]}</StepLabel>
-                    </Step>
-                ))}
-            </Stepper>
-            <Box sx={{ marginTop: 2, textAlign: 'right' }}>
-                <Button onClick={resetVote}>Reset Vote</Button>
-                <Button variant="contained" sx={{ textAlign: 'right' }} onClick={handleChangeWorkflowStatus}>Change to next workflow status</Button>
-            </Box>
+            {accounts[0] === owner && 
+            <>
+                <Stepper activeStep={workflowStatus} alternativeLabel>
+                    {Object.keys(WorkflowStatusLabels).map((id) => (
+                        <Step key={id}>
+                            <StepLabel>{WorkflowStatusLabels[id]}</StepLabel>
+                        </Step>
+                    ))}
+                </Stepper>
+                <Box sx={{ marginTop: 2, textAlign: 'right', fontSize: '12px' }}>
+                    <Button onClick={resetVote}>Reset Vote</Button>
+                    <Button variant="contained" sx={{ textAlign: 'right' }} onClick={handleChangeWorkflowStatus}>Change to next workflow status</Button>
+                </Box>
+            </>
+            }
             <SnackbarAlert open={open} setOpen={setOpen} message={message} severity={severity} />
         </Box>
     )
 }
 
-export default VotingState
+export default ManageWorkflow

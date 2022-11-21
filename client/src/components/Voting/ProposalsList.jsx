@@ -11,6 +11,8 @@ const ProposalsList = () => {
     const [proposals, setProposals] = useState([])
 
     useEffect(() => {
+
+        // Mutualized funtion to add new proposal to the list.
         const addPropositionToList = async (proposalId) => {
             const proposal = await contract.methods.getOneProposal(proposalId).call({ from: accounts[0] })
             setProposals(current => {
@@ -50,19 +52,22 @@ const ProposalsList = () => {
 
     return (
         <Box sx={{ width: '100%' }}>
-            <List>
-            {
-                (proposals).map((proposal, index) => {
-                    return (<ListItem key={index}>
-                        <ListItemText 
-                            primary={proposal.description}
-                            secondary={
-                                <span>Number of votes: {proposal.voteCount}</span>
-                            } />
-                    </ListItem>)
-                })
+            {proposals && proposals.length > 0 &&
+            <>
+                <p>Proposals submitted :</p>
+                <List>
+                {
+                    (proposals).map((proposal, index) => {
+                        return (
+                            <ListItem key={index}>
+                                <ListItemText primary={proposal.description} />
+                            </ListItem>
+                        )
+                    })
+                }
+                </List>
+            </>
             }
-            </List>
         </Box>
     )
 }

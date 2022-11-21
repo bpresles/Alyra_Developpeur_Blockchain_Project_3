@@ -36,7 +36,7 @@ const EthProvider = ({ children }) => {
   useEffect(() => {
     const tryInit = async () => {
       try {
-        const artifact = require("../../contracts/goerli/Voting.json");
+        const artifact = require("../../contracts/ganache/Voting.json");
         init(artifact);
       } catch (err) {
         console.error(err);

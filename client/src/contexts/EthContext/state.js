@@ -1,28 +1,8 @@
 const actions = {
   init: "INIT",
   tx: "TRANSACTION",
-};
-
-const initialState = {
-  artifact: null,
-  web3: null,
-  accounts: null,
-  networkID: null,
-  contract: null,
-  owner: null,
-  transactionHash: null,
-};
-
-const reducer = (state, action) => {
-  const { type, data } = action;
-  switch (type) {
-    case actions.init:
-    case actions.tx:
-      return { ...state, ...data };
-    default:
-      throw new Error("Undefined reducer action type");
-  }
-};
+  changeWorkflowStatus: "CHANGE_WORKFLOW_STATUS",
+}
 
 const WorkflowStatus = {
   RegisteringVoters: 0,
@@ -41,6 +21,29 @@ const WorkflowStatusLabels = {
   4: 'Voting session ended',
   5: 'Vote tallied',
 }
+
+const initialState = {
+  artifact: null,
+  web3: null,
+  accounts: null,
+  networkID: null,
+  contract: null,
+  owner: null,
+  transactionHash: null,
+  currentWorkflowStatus : WorkflowStatus.RegisteringVoters,
+};
+
+const reducer = (state, action) => {
+  const { type, data } = action;
+  switch (type) {
+    case actions.init:
+    case actions.tx:
+    case actions.changeWorkflowStatus:
+      return { ...state, ...data }
+    default:
+      throw new Error("Undefined reducer action type");
+  }
+};
 
 export {
   actions,

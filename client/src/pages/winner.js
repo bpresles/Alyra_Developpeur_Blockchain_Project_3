@@ -1,12 +1,13 @@
 
+import { Box } from '@mui/material';
 import React from 'react';
 import WinningProposal from '../components/Voting/WinningProposal';
   
 const Winner = () => {
   return (
-    <div>
+    <Box>
       <WinningProposal />
-    </div>
+    </Box>
   );
 };
   

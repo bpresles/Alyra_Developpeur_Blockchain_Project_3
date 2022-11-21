@@ -4,6 +4,8 @@ import NoticeNoArtifact from "../Common/NoticeNoArtifact";
 import NoticeWrongNetwork from "../Common/NoticeWrongNetwork";
 import ConnectedInfo from "../Common/ConnectedInfo";
 import TabsRouter from "../Common/TabsRouter";
+import WorkflowStatusProvider from "../Common/WorkflowStatusProvider";
+import { Box } from "@mui/material";
   
 const Voting = () => {
     const { state } = useEthContext()
@@ -13,10 +15,12 @@ const Voting = () => {
             {
                 !state.artifact ? <NoticeNoArtifact /> :
                     !state.contract ? <NoticeWrongNetwork /> :
-                        <>
-                            <ConnectedInfo />
-                            <TabsRouter />
-                        </>
+                        <Box>
+                            <WorkflowStatusProvider>
+                                <ConnectedInfo />
+                                <TabsRouter />
+                            </WorkflowStatusProvider>
+                        </Box>
             }
         </div>
     );

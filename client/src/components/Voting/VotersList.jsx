@@ -73,19 +73,24 @@ const VotersList = () => {
 
     return (
         <Box sx={{ width: '100%' }}>
-            <List>
-            {
-                (Object.keys(voters)).map((voterAddress) => {
-                    return (<ListItem key={voterAddress}>
-                        <ListItemText 
-                            primary={voterAddress}
-                            secondary={
-                                <span>Has voted ? {voters[voterAddress].hasVoted ? 'Yes' : 'No'}</span>
-                            } />
-                    </ListItem>)
-                })
+            {voters && Object.keys(voters).length > 0 &&
+            <>
+                <p>Voters registered:</p>
+                <List>
+                {
+                    (Object.keys(voters)).map((voterAddress) => {
+                        return (<ListItem key={voterAddress}>
+                            <ListItemText 
+                                primary={voterAddress}
+                                secondary={
+                                    <span>Has voted ? {voters[voterAddress].hasVoted ? 'Yes' : 'No'}</span>
+                                } />
+                        </ListItem>)
+                    })
+                }
+                </List>
+            </>
             }
-            </List>
         </Box>
     )
 }

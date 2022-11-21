@@ -1,18 +1,23 @@
 import { Box, Button, TextField } from "@mui/material";
-import { useState } from "react";
-import { actions } from "../../contexts/EthContext/state";
+import { useEffect, useState } from "react";
+import { actions, WorkflowStatus } from "../../contexts/EthContext/state";
 import useEthContext from "../../hooks/useEthContext";
 import { getRPCErrorMessage } from "../Common/error";
 import SnackbarAlert from "../Common/SnackbarAlert";
 import ProposalsList from "./ProposalsList";
 
 const MakeProposalForm = () => {
-    const { state: { contract, accounts }, dispatch } = useEthContext()
+    const { state: { contract, accounts, currentWorkflowStatus }, dispatch } = useEthContext()
+    const [workflowStatus, setWorkflowStatus] = useState(currentWorkflowStatus)
     const [proposalDesc, setProposalDesc] = useState('')
 
     const [open, setOpen] = useState(false)
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('success')
+
+    useEffect(() => {
+        setWorkflowStatus(currentWorkflowStatus)
+    }, [contract, accounts, dispatch, currentWorkflowStatus])
 
     const handleProposalDescChange = e => {
         setProposalDesc(e.target.value);
@@ -45,6 +50,7 @@ const MakeProposalForm = () => {
                 type: actions.tx,
                 data: { transactionHash: '' }
             })
+            setProposalDesc('')
         }
         catch (err) {
             console.log(err)
@@ -69,8 +75,12 @@ const MakeProposalForm = () => {
             noValidate
             autoComplete="off"
         >
-            <TextField label="Your proposal" value={proposalDesc} onChange={handleProposalDescChange} variant="standard" />
-            <Button onClick={handleMakeProposal} variant="contained">Send proposal</Button>
+            { workflowStatus === WorkflowStatus.ProposalsRegistrationStarted &&
+            <>
+                <TextField label="Your proposal" value={proposalDesc} onChange={handleProposalDescChange} variant="standard" />
+                <Button onClick={handleMakeProposal} variant="contained">Send proposal</Button>
+            </>
+            }
             <ProposalsList />
             <SnackbarAlert open={open} setOpen={setOpen} message={message} severity={severity} />
         </Box>

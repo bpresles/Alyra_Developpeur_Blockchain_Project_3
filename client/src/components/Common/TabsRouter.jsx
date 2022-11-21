@@ -13,11 +13,12 @@ import {
   useLocation,
 } from 'react-router-dom';
 import Home from "../../pages";
-import Admin from "../../pages/admin";
+import WorkflowAdmin from "../../pages/workflow";
 import Vote from "../../pages/vote";
 import Proposal from "../../pages/proposal";
 import Winner from "../../pages/winner";
 import Voter from "../../pages/voter";
+import ManageVoters from "../Voting/ManageVoters";
 
 const useRouteMatch = (patterns) => {
   const { pathname } = useLocation();
@@ -34,46 +35,34 @@ const useRouteMatch = (patterns) => {
 }
 
 const MyTabs = () => {
-  const routeMatch = useRouteMatch(['/', '/admin', '/proposal', '/vote', '/winner']);
+  const routeMatch = useRouteMatch(['/', '/workflow', '/addvoters', '/proposal', '/vote', '/voter', '/winner']);
   const currentTab = routeMatch?.pattern?.path;
 
-  const { state: { accounts, contract, networkID, owner } } = useEthContext();
-  const [workflowStatus, setWorkflowStatus] = useState(WorkflowStatus.RegisteringVoters)
+  const { state: { accounts, contract, networkID, owner, currentWorkflowStatus }, dispatch } = useEthContext();
+  const [workflowStatus, setWorkflowStatus] = useState(currentWorkflowStatus)
 
   let connectedUser = useRef(accounts[0])
   let network = useRef(networkID)
 
   useEffect(() => {
-      (async () => {
-          const currentStatus = await contract.methods.workflowStatus().call({from: accounts[0]})
-          if (currentStatus) {
-              setWorkflowStatus(parseInt(currentStatus))
-          }
+      setWorkflowStatus(currentWorkflowStatus)
 
-          await contract.events.WorkflowStatusChange({fromBlock: 'earliest'})
-              .on('data', event => {
-                  let newWorkflowStatus = parseInt(event.returnValues.newStatus);
-                  setWorkflowStatus(newWorkflowStatus);
-                  console.log(newWorkflowStatus);
-              })
-              .on('changed', changed => console.log(changed))
-              .on('error', error => console.log(error))
-              .on('connected', str => console.log(str));
-
-          connectedUser.current = accounts[0]
-          network.current = networkID
-      })()
-  }, [accounts, connectedUser, contract, networkID])
+      connectedUser.current = accounts[0]
+      network.current = networkID
+  }, [accounts, connectedUser, contract, dispatch, currentWorkflowStatus, networkID])
 
   return (
     <Tabs value={currentTab}>  
       <Tab label="Home" value='/' to='/' component={Link} />
-    {accounts[0] === owner &&
-      <Tab label="Administer votes" value="/admin" to='/admin' component={Link} />
+    {connectedUser.current === owner &&
+      <Tab label="Workflow" value="/workflow" to='/workflow' component={Link} />
+    }
+    {connectedUser.current === owner &&
+      <Tab label="Add voters" value="/addvoters" to='/addvoters' component={Link} />
     }
     {(workflowStatus === WorkflowStatus.ProposalsRegistrationStarted 
-      || (workflowStatus > WorkflowStatus.ProposalsRegistrationStarted && accounts[0] === owner)) &&
-      <Tab label="Make proposals" value="/proposal" to='/proposal' component={Link} />
+      || (workflowStatus > WorkflowStatus.ProposalsRegistrationStarted && connectedUser.current === owner)) &&
+      <Tab label="Proposals" value="/proposal" to='/proposal' component={Link} />
     }
     {workflowStatus > WorkflowStatus.RegisteringVoters &&
       <Tab label="Get voter" value="/voter" to='/voter' component={Link} />
@@ -95,7 +84,8 @@ const TabsRouter = () => {
       <p>&nbsp;</p>
       <Routes>
         <Route exact path='/' element={<Home />} />
-        <Route path='/admin' element={<Admin />} />
+        <Route path='/workflow' element={<WorkflowAdmin />} />
+        <Route path='/addvoters' element={<ManageVoters />} />
         <Route path='/proposal' element={<Proposal />} />
         <Route path='/voter' element={<Voter />} />
         <Route path='/vote' element={<Vote />} />
