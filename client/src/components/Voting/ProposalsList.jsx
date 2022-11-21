@@ -8,33 +8,28 @@ import ListItemText from '@mui/material/ListItemText';
 
 const ProposalsList = () => {
     const { state: { contract, accounts } } = useEthContext()
-    const [proposals, setProposals] = useState([])
+    const [proposals, setProposals] = useState({})
 
     useEffect(() => {
-
-        // Mutualized funtion to add new proposal to the list.
         const addPropositionToList = async (proposalId) => {
-            const proposal = await contract.methods.getOneProposal(proposalId).call({ from: accounts[0] })
-            setProposals(current => {
-                return [...current, proposal]
-            });
+            // Only add proposal if it's not already added
+            if (!proposals[proposalId]) {
+                const proposal = await contract.methods.getOneProposal(proposalId).call({ from: accounts[0] })
+                const proposalInfos = {}
+                proposalInfos[proposalId] = proposal
+                setProposals(current => {
+                    return {...current, ...proposalInfos}
+                });
+            }
         }
 
         (async () => {
             try {
                 // Find all proposals submitted in the contract since last reset.
                 const initialVoteSessionBlock = await contract.methods.votingSessionStartBlock().call({ from: accounts[0] })
-                await contract.events.ProposalRegistered({fromBlock: 'earliest'})
-                    .on('data', async event => {
-                        addPropositionToList(event.returnValues.proposalId)
-                    })
-                    .on('changed', changed => console.log(changed))
-                    .on('error', error => console.log(error))
-                    .on('connected', str => console.log(str))
-
                 let oldEvents = await contract.getPastEvents('ProposalRegistered', {
-                            fromBlock: initialVoteSessionBlock,
-                            toBlock: 'latest'
+                    fromBlock: initialVoteSessionBlock,
+                    toBlock: 'latest'
                 });
 
                 if (oldEvents && oldEvents.length > 0) {
@@ -42,25 +37,33 @@ const ProposalsList = () => {
                         addPropositionToList(event.returnValues.proposalId)
                     });
                 }
+
+                await contract.events.ProposalRegistered({fromBlock: 'earliest'})
+                    .on('data', async event => {
+                        addPropositionToList(event.returnValues.proposalId)
+                    })
+                    .on('changed', changed => console.log(changed))
+                    .on('error', error => console.log(error))
+                    .on('connected', str => console.log(str))
             }
             catch (e) {
                 const reason = getRPCErrorMessage(e);
                 console.log(reason)
             }
         })()
-    }, [contract, accounts])
+    }, [contract, accounts, proposals, setProposals])
 
     return (
         <Box sx={{ width: '100%' }}>
-            {proposals && proposals.length > 0 &&
+            {proposals && Object.keys(proposals).length > 0 &&
             <>
                 <p>Proposals submitted :</p>
                 <List>
                 {
-                    (proposals).map((proposal, index) => {
+                    (Object.keys(proposals)).map((proposalId) => {
                         return (
-                            <ListItem key={index}>
-                                <ListItemText primary={proposal.description} />
+                            <ListItem key={proposalId}>
+                                <ListItemText primary={proposals[proposalId].description} />
                             </ListItem>
                         )
                     })

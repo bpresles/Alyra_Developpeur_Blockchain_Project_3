@@ -12,12 +12,15 @@ const VotersList = () => {
 
     useEffect(() => {
         const addVoterToList = async (voterAddress) => {
-            const voter = await contract.methods.getVoter(voterAddress).call({ from: voterAddress })
-            const voterInfos = {}
-            voterInfos[voterAddress] = voter
-            setVoters(current => {
-                return {...current, ...voterInfos}
-            });
+            // Only add voter if it's not already added
+            if (!voters[voterAddress]) {
+                const voter = await contract.methods.getVoter(voterAddress).call({ from: voterAddress })
+                const voterInfos = {}
+                voterInfos[voterAddress] = voter
+                setVoters(current => {
+                    return {...current, ...voterInfos}
+                });
+            }
         }
 
         (async () => {
@@ -29,23 +32,17 @@ const VotersList = () => {
                             toBlock: 'latest'
                 });
 
-                console.log(oldEvents)
-
                 if (oldEvents && oldEvents.length > 0) {
                     oldEvents.map(async event => {
                         const voterAddress = event.returnValues.voterAddress
-                        if (!voters[voterAddress]) {
-                            addVoterToList(voterAddress)
-                        }
+                        addVoterToList(voterAddress)
                     });
                 }
 
                 await contract.events.VoterRegistered({fromBlock: 'earliest'})
                     .on('data', async event => {
                         const voterAddress = event.returnValues.voterAddress
-                        if (!voters[voterAddress]) {
-                            addVoterToList(voterAddress)
-                        }
+                        addVoterToList(voterAddress)
                     })
                     .on('changed', changed => console.log(changed))
                     .on('error', error => console.log(error))
@@ -68,8 +65,6 @@ const VotersList = () => {
             }
         })()
     }, [contract, accounts, setVoters, voters])
-    
-    console.log(Object.keys(voters))
 
     return (
         <Box sx={{ width: '100%' }}>
