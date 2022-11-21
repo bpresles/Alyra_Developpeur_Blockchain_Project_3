@@ -5,6 +5,8 @@
   - [Table of Contents](#table-of-contents)
   - [Presentation](#presentation)
   - [Live demo](#live-demo)
+    - [Public deployment](#public-deployment)
+    - [Live video demonstration](#live-video-demonstration)
   - [Structure](#structure)
   - [Installation](#installation)
   - [Commands](#commands)
@@ -27,10 +29,12 @@ A simple voting system for small organizations that allows to register voters, l
 
 <a name="demo"></a>
 ## Live demo
-You can access a live demo on these URLs:
 
-- With an IPFS enabled browser like Brave: ipns://alyra_project3.presles.fr/
-- With any browser: https://alyra-developpeur-blockchain-project-3-bpresles.vercel.app/
+### Public deployment
+You can access a live version of this app on these URL: https://alyra-developpeur-blockchain-project-3-bpresles.vercel.app/
+
+### Live video demonstration
+You can see a demonstration in video at this URL: https://www.loom.com/share/7414a7a569434635b8464677930917bf
 
 <a name="structure"></a>
 ## Structure
