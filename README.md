@@ -34,7 +34,7 @@ A simple voting system for small organizations that allows to register voters, l
 You can access a live version of this app on these URLs: 
 
 - Any web browser: https://alyra-developpeur-blockchain-project-3-bpresles.vercel.app/
-- IPFS enabled web browser (like Brave): ipns://alyra_project3.presles.fr/
+- IPFS enabled web browser (like Brave): ipns://alyra-project3.presles.fr/
 
 ### Live video demonstration
 You can see a demonstration in video at this URL: https://www.loom.com/share/7414a7a569434635b8464677930917bf
