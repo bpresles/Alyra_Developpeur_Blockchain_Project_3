@@ -102,14 +102,7 @@ const ManageWorkflow = () => {
                     break;
             }
 
-            if (changeWorkflowStatusCall) {
-                const newWorkflowStatus = changeWorkflowStatusCall.events.WorkflowStatusChange.returnValues.newStatus;
-                setWorkflowStatus(newWorkflowStatus)
-                dispatch({
-                    type: actions.changeWorkflowStatus,
-                    data: { currentWorkflowStatus: newWorkflowStatus }
-                })
-                
+            if (changeWorkflowStatusCall) {                
                 setMessage('Workflow status changed')
                 setSeverity('success')
             } else {
